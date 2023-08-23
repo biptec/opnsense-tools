@@ -15,7 +15,7 @@ All tasks require a root user.  Do the following to grab the repositories
 
     # pkg install git
     # cd /usr
-    # git clone https://github.com/biptec/opnsense-tools
+    # git clone https://github.com/biptec/opnsense-tools tools
     # cd tools
     # make update
 
@@ -24,7 +24,7 @@ by setting ROOTDIR.  For example:
 
     # mkdir -p /tmp/opnsense
     # cd /tmp/opnsense
-    # git clone https://github.com/biptec/opnsense-tools
+    # git clone https://github.com/biptec/opnsense-tools tools
     # cd tools
     # env ROOTDIR=/tmp/opnsense make update
 
