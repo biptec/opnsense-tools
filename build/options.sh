@@ -1,4 +1,4 @@
-#!/bin/sh
+3#!/bin/sh
 
 # Copyright (c) 2021-2022 Franco Fichtner <franco@opnsense.org>
 #
