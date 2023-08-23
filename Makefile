@@ -89,7 +89,7 @@ DEVICE?=	A10
 COMSPEED?=	115200
 UEFI?=		arm dvd serial vga vm
 ZFS?=		# empty
-GITBASE?=	https://github.com/opnsense
+GITBASE?=	https://github.com/biptec
 MIRRORS?=	https://opnsense.c0urier.net \
 		https://mirrors.nycbug.org/pub/opnsense \
 		https://mirror.wdc1.us.leaseweb.net/opnsense \

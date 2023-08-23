@@ -75,7 +75,7 @@ for ARG in ${ARGS}; do
 		;;
 	esac
 
-	git_clone ${DIR} "${URL}"
+	git_clone ${DIR} "opnsense-${URL}"
 	git_fetch ${DIR}
 	for BRANCH in ${BRANCHES}; do
 		git_pull ${DIR} ${BRANCH}
