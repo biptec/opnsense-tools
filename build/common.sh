@@ -342,10 +342,10 @@ git_clone()
 	URL=${2}
 
 	if [ -z "${URL}" ]; then
-		URL=${PRODUCT_GITBASE}/$(basename ${1})
+	    URL=${PRODUCT_GITBASE}/opnsense-$(basename ${1})
 	fi
 
-	git clone "${URL}" ${1}
+	git clone "opnsense-${URL}" ${1}
 }
 
 git_pull()
