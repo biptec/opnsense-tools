@@ -122,6 +122,10 @@ for ARG in ${@}; do
 		echo ">>> Removing vm image"
 		rm -f ${IMAGESDIR}/*-vm-${PRODUCT_ARCH}.*
 		;;
+	vagrantbox)
+ 	        echo ">>> Removing vagrant box"
+	        rm -f ${VAGRANTBOXESDIR}/*-vagrant-${PRODUCT_ARCH}.*
+	        ;;
 	xtools)
 		echo ">>> Removing xtools set"
 		rm -f ${SETSDIR}/xtools-*-${PRODUCT_ARCH}.*
