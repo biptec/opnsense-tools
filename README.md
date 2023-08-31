@@ -77,6 +77,7 @@ Available build options are:
 * UEFI:		use amd64 hybrid images for said images, e.g. "vga vm"
 * VERSION:	a version tag (if applicable)
 * ZFS:		ZFS pool name to create for VM images, e.g. "zpool"
+* VAGRANT:	creating a vagrant user in the image
 
 How to specify build options via configuration file
 ---------------------------------------------------
@@ -98,6 +99,10 @@ Kernel, base, packages and release sets are stored under:
 All final images are stored under:
 
     # make print-IMAGESDIR
+
+All final vagrant boxes are stored under:
+
+    # make print-VAGRANTBOXES
 
 Build the userland binaries, bootloader and administrative files:
 
@@ -138,6 +143,10 @@ A flash card full disk image is created using:
 A virtual machine full disk image is created using:
 
     # make vm
+
+A vagrant box is created using:
+
+    # make vagrantbox
 
 A special embedded device image based on vm variety:
 
@@ -336,6 +345,21 @@ The swap argument is either its size or set to "off" to disable.
 
 The extras argument can be any extras.conf hook in case the
 default "vm" hook is not desirable.
+
+Vagrant boxes
+-------------
+
+Vagrant box is created with the same parameters as the virtual machine image, but instead of the `vm` prefix, you need to specify `vagrantbox`:
+
+    # make vagrantbox-<format>[,<size>[,<swap>[,<extras>]]]
+
+Available virtual machines:
+
+* vmdk:		VMWare
+
+An example of creating a vagrant box with additional packages and plugins:
+
+    # make vagrantbox-vmdk,5G,never DEVICE=ARM64 ADDITIONS="git emacs-nox open-vm-tools-nox11 zsh ohmyzsh rsync os-firewall os-frr"
 
 Clearing individual build step progress
 ---------------------------------------

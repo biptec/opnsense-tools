@@ -248,9 +248,10 @@ export STAGEDIR="${STAGEDIRPREFIX}${CONFIGDIR}/${PRODUCT_ARCH}"
 export TARGETDIRPREFIX="/usr/local/opnsense/build"
 export TARGETDIR="${TARGETDIRPREFIX}/${PRODUCT_SETTINGS}/${PRODUCT_ARCH}"
 export IMAGESDIR="${TARGETDIR}/images"
+export VAGRANTBOXESDIR="${TARGETDIR}/vagrantboxes"
 export LOGSDIR="${TARGETDIR}/logs"
 export SETSDIR="${TARGETDIR}/sets"
-mkdir -p ${IMAGESDIR} ${SETSDIR} ${LOGSDIR}
+mkdir -p ${IMAGESDIR} ${SETSDIR} ${LOGSDIR} ${VAGRANTBOXESDIR}
 
 # automatically expanded product stuff
 export PRODUCT_PRIVKEY=${PRODUCT_PRIVKEY:-"${CONFIGDIR}/repo.key"}
@@ -267,6 +268,10 @@ export PRODUCT_PLUGIN="os-*${PRODUCT_DEVEL}"
 # assume that arguments mean we are doing a rebuild
 if [ -n "${*}" ]; then
 	export PRODUCT_REBUILD=yes
+fi
+
+if [ "${SELF}" = "vagrantbox" ]; then
+    export PRODUCT_VAGRANT=1
 fi
 
 case "${SELF}" in
@@ -1059,7 +1064,7 @@ setup_packages()
 {
 	setup_norun ${1}
 	extract_packages ${1}
-	install_packages ${@} ${PRODUCT_ADDITIONS} ${PRODUCT_CORE}
+	install_packages ${@} bash ${PRODUCT_ADDITIONS} ${PRODUCT_CORE}
 
 	# remove package repository
 	rm -rf ${1}${PACKAGESDIR}
@@ -1241,4 +1246,79 @@ list_packages()
 	fi
 
 	list_config ${@}
+}
+
+
+setup_vmware_guest()
+{
+    local rootdir=${1}
+
+    if [ -z "${PRODUCT_ADDITIONS##*open-vm-tools*}" ]; then
+        echo ">>> Enalbe VMWare tools in /etc/rc.conf"
+
+        cat >> ${rootdir}/etc/rc.conf << EOF
+vmware_guest_vmblock_enable="YES"
+vmware_guest_vmhgfs_enable="YES"
+vmware_guest_vmmemctl_enable="YES"
+vmware_guest_vmxnet_enable="YES"
+vmware_guestd_enable="YES"
+EOF
+    fi
+}
+
+setup_user_environment()
+{
+    local rootdir=${1}
+
+    if [ -z "${PRODUCT_ADDITIONS##*ohmyzsh*}" ]; then
+        echo ">>> Setup `.zshrc` from ohmyzsh template"
+        echo "${rootdir}/usr/share/skel/dot.zshrc ${rootdir}/root/.zshrc" | xargs -n 1 cp ${rootdir}/usr/local/share/ohmyzsh/templates/zshrc.zsh-template
+
+        echo ">>> Disable git status in ohmyzsh"
+        cat >> ${rootdir}/usr/share/skel/dot.gitconfig << EOF
+[oh-my-zsh]
+        hide-info = 1
+        hide-status = 1
+        hide-dirty = 1
+EOF
+    fi
+}
+
+create_sudo_user()
+{
+    local rootdir=${1}
+    local username=${2}
+    local authorized_keys=${3}
+
+    echo ">>> Creating \"${username}\" user"
+
+    if [ -z "${PRODUCT_ADDITIONS##*bash*}" ]; then
+        SHELL="/usr/local/bin/bash"
+    fi
+
+    if [ -z "${PRODUCT_ADDITIONS##*zsh*}" ]; then
+        SHELL="/usr/local/bin/zsh"
+    fi
+
+    chroot ${rootdir} /bin/sh -es << EOF
+pw adduser -n ${username} -m -s ${SHELL} -L default -c "${username} user" -G wheel
+touch /home/${username}/.hushlogin
+
+if [ -n "${authorized_keys}" ]; then
+   echo ">>> Setup .ssh/authorized_keys for \"${username}\" user"
+
+   mkdir /home/${username}/.ssh
+   echo "${authorized_keys}" > /home/${username}/.ssh/authorized_keys
+
+   chmod 0700 /home/${username}/.ssh
+   chmod 0600 /home/${username}/.ssh/authorized_keys
+fi
+
+chown -R ${username}:${username} /home/${username}
+EOF
+
+    echo ">>> Allow sudo without password for \"${username}\" user"
+    cat >> ${rootdir}/usr/local/etc/sudoers.d/${username} << EOF
+${username} ALL=(ALL) NOPASSWD: ALL
+EOF
 }

@@ -119,6 +119,14 @@ setup_packages ${STAGEDIR}/mnt
 setup_extras ${STAGEDIR}/mnt ${VMEXTRAS}
 setup_entropy ${STAGEDIR}/mnt
 
+setup_vmware_guest ${STAGEDIR}/mnt
+setup_user_environment ${STAGEDIR}/mnt
+
+if [ -n "${PRODUCT_VAGRANT}" ]; then
+    authorized_keys=`fetch --no-verify-peer -q -o '-' https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub`
+    create_sudo_user ${STAGEDIR}/mnt "vagrant" "${authorized_keys}"
+fi
+
 cat > ${STAGEDIR}/mnt/etc/fstab << EOF
 # Device	Mountpoint	FStype	Options	Dump	Pass#
 EOF

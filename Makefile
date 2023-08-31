@@ -27,7 +27,7 @@ STEPS=		audit arm base boot chroot clean clone compress confirm \
 		connect core distfiles download dvd fingerprint info \
 		kernel list make.conf nano options packages plugins ports \
 		prefetch print rebase release rename serial sign \
-		skim test update upload verify vga vm xtools
+		skim test update upload verify vga vm xtools vagrantbox
 SCRIPTS=	custom distribution factory hotfix nightly watch
 
 .PHONY:		${STEPS} ${SCRIPTS}
@@ -89,6 +89,7 @@ DEVICE?=	A10
 COMSPEED?=	115200
 UEFI?=		arm dvd serial vga vm
 ZFS?=		# empty
+VAGRANT?=	# empty
 GITBASE?=	https://github.com/biptec/opnsense-
 MIRRORS?=	https://opnsense.c0urier.net \
 		https://mirrors.nycbug.org/pub/opnsense \
@@ -134,6 +135,7 @@ arm dvd nano serial vga vm: kernel core
 sets: kernel distfiles packages
 images: dvd nano serial vga vm
 release: dvd nano serial vga
+vagrantbox: vm
 
 # Expand target arguments for the script append:
 
@@ -155,7 +157,7 @@ VERBOSE_FLAGS=	-x
 VERBOSE_HIDDEN=	@
 .endif
 
-.for _VERSION in ABI DEBUG LUA PERL PHP PYTHON RUBY SSL VERSION ZFS
+.for _VERSION in ABI DEBUG LUA PERL PHP PYTHON RUBY SSL VERSION ZFS VAGRANT
 VERSIONS+=	PRODUCT_${_VERSION}=${${_VERSION}}
 .endfor
 
