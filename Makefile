@@ -178,7 +178,7 @@ ${STEP}: lint-steps
 	    -H "${COREENV}" -u "${UEFI:tl}" -U "${SUFFIX}" \
 	    -V "${ADDITIONS}" -O "${GITBASE}"  -r "${SERVER}" \
 	    -h "${PLUGINSENV}" -I "${UPLOADDIR}" -D "${EXTRABRANCH}" \
-	    -A "${PORTSREFURL}" -J "${PORTSENV}" ${${STEP}_ARGS}
+	    -A "${PORTSREFURL}" -J "${PORTSENV}" -x "${STEPS}" ${${STEP}_ARGS}
 .endfor
 
 .for SCRIPT in ${SCRIPTS}

@@ -28,7 +28,7 @@
 
 set -e
 
-OPTS="A:a:B:b:C:c:D:d:E:e:F:G:g:H:h:I:J:K:k:L:l:m:n:O:o:P:p:R:r:S:s:T:t:U:u:v:V:"
+OPTS="A:a:B:b:C:c:D:d:E:e:F:G:g:H:h:I:J:K:k:L:l:m:n:O:o:P:p:R:r:S:s:T:t:U:u:v:V:x:"
 
 while getopts ${OPTS} OPT; do
 	case ${OPT} in
@@ -166,6 +166,9 @@ while getopts ${OPTS} OPT; do
 	V)
 		export PRODUCT_ADDITIONS=${OPTARG}
 		;;
+	x)
+	        export PRODUCT_STEPS=${OPTARG}
+	        ;;
 	*)
 		echo "${0}: Unknown argument '${OPT}'" >&2
 		exit 1
@@ -270,7 +273,8 @@ if [ -n "${*}" ]; then
 	export PRODUCT_REBUILD=yes
 fi
 
-if [ "${SELF}" = "vagrantbox" ]; then
+if [ -z "${PRODUCT_STEPS##*vagrantbox*}" ]; then
+    export PRODUCT_WANTS="${PRODUCT_WANTS} gtar"
     export PRODUCT_VAGRANT=1
 fi
 
