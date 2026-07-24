@@ -346,6 +346,11 @@ The swap argument is either its size or set to "off" to disable.
 The extras argument can be any extras.conf hook in case the
 default "vm" hook is not desirable.
 
+The Biptec VM profile enables key-only SSH, obtains the LAN IPv4 address
+through DHCP and removes the default LAN IPv4 DHCP range:
+
+    # make vm-vmdk,20G,1G,biptec
+
 Clearing individual build step progress
 ---------------------------------------
 
