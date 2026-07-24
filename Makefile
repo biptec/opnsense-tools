@@ -111,6 +111,7 @@ VERSION?=	${_VERSION}
 ZFS?=		# empty
 
 GITBASE?=	https://github.com/opnsense
+GITPREFIX?=	# empty
 MIRRORS?=	https://opnsense.c0urier.net \
 		https://mirrors.nycbug.org/pub/opnsense \
 		https://mirror.wdc1.us.leaseweb.net/opnsense \
@@ -200,7 +201,7 @@ ${STEP}: lint-steps
 	    -b ${SRCBRANCH} -B ${PORTSBRANCH} -e ${PLUGINSBRANCH} \
 	    -g ${TOOLSBRANCH} -E ${COREBRANCH} -G ${PORTSREFBRANCH} \
 	    -H "${COREENV}" -u "${UEFI:tl}" -U "${SUFFIX}" \
-	    -V "${ADDITIONS}" -O "${GITBASE}"  -r "${SERVER}" \
+	    -V "${ADDITIONS}" -O "${GITBASE}" -q "${GITPREFIX}" -r "${SERVER}" \
 	    -h "${PLUGINSENV}" -I "${REMOTEDIR}" -D "${EXTRABRANCH}" \
 	    -A "${PORTSREFURL}" -J "${PORTSENV}" -f "${ZFS}" ${${STEP}_ARGS}
 .endfor

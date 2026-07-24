@@ -68,6 +68,8 @@ Available build options are:
 * COMSPEED:	serial speed, e.g. "115200" (default)
 * DEBUG:	build a debug kernel with additional object information
 * DEVICE:	loads device-specific modifications, e.g. "A10" (default)
+* GITBASE:	the base URL containing the source repositories
+* GITPREFIX:	an optional prefix prepended to repository names
 * KERNEL:	the kernel config to use, e.g. SMP (default)
 * MIRRORS:	a list of mirrors to prefetch sets from
 * NAME:		"OPNsense" (default)
@@ -88,6 +90,11 @@ and to avoid excessive Makefile arguments.
 
 A local override exists as "CONFIGDIR/build.conf.local" and is
 parsed first to allow more flexible overrides.  Use with care.
+
+For forks whose repositories use a common prefix, configure both values:
+
+    GITBASE=https://github.com/biptec
+    GITPREFIX=opnsense-
 
 How to run individual or composite build steps
 ----------------------------------------------
