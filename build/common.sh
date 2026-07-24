@@ -260,7 +260,8 @@ export TARGETDIR="${TARGETDIRPREFIX}/${PRODUCT_SETTINGS}/${PRODUCT_ARCH}"
 export IMAGESDIR="${TARGETDIR}/images"
 export LOGSDIR="${TARGETDIR}/logs"
 export SETSDIR="${TARGETDIR}/sets"
-mkdir -p ${IMAGESDIR} ${SETSDIR} ${LOGSDIR}
+export VAGRANTBOXESDIR="${TARGETDIR}/vagrantboxes"
+mkdir -p ${IMAGESDIR} ${SETSDIR} ${LOGSDIR} ${VAGRANTBOXESDIR}
 
 # automatically expanded product stuff
 export PRODUCT_PRIVKEY=${PRODUCT_PRIVKEY:-"${CONFIGDIR}/repo.key"}

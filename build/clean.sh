@@ -137,6 +137,10 @@ for ARG in ${@}; do
 		echo ">>> Removing vga image"
 		rm -f ${IMAGESDIR}/*-vga-${PRODUCT_ARCH}.img*
 		;;
+	vagrantbox)
+		echo ">>> Removing Vagrant boxes"
+		rm -f ${VAGRANTBOXESDIR}/*.box
+		;;
 	vm)
 		echo ">>> Removing vm image"
 		rm -f ${IMAGESDIR}/*-vm-${PRODUCT_ARCH}.*

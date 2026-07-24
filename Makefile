@@ -29,8 +29,8 @@ STEPS=		audit arm base boot chroot clean clone compress confirm \
 		kernel list make.conf nano obsolete options packages \
 		plugins ports prefetch print rebase release rename \
 		serial sign skim sync test tests update upload \
-		verify vga vm xtools
-SCRIPTS=	custom distribution hotfix nightly pkgver watch
+		verify vagrantbox vga vm xtools
+SCRIPTS=	custom distribution hotfix nightly pkgver vagrant watch
 
 .PHONY:		${STEPS} ${SCRIPTS}
 
