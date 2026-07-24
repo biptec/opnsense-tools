@@ -28,7 +28,7 @@
 
 set -e
 
-OPTS="A:a:B:b:C:c:D:d:E:e:F:f:G:g:H:h:I:J:K:k:L:l:m:n:O:o:P:p:R:r:S:s:T:t:U:u:v:V:"
+OPTS="A:a:B:b:C:c:D:d:E:e:F:f:G:g:H:h:I:J:K:k:L:l:m:n:O:o:P:p:q:R:r:S:s:T:t:U:u:v:V:"
 
 while getopts ${OPTS} OPT; do
 	case ${OPT} in
@@ -133,6 +133,9 @@ while getopts ${OPTS} OPT; do
 		;;
 	p)
 		export PLUGINSDIR=${OPTARG}
+		;;
+	q)
+		export PRODUCT_GITPREFIX=${OPTARG}
 		;;
 	R)
 		export PORTSREFDIR=${OPTARG}
@@ -356,7 +359,7 @@ git_clone()
 	URL=${2}
 
 	if [ -z "${URL}" ]; then
-		URL=${PRODUCT_GITBASE}/$(basename ${1})
+		URL=${PRODUCT_GITBASE}/${PRODUCT_GITPREFIX}$(basename ${1})
 	fi
 
 	git clone --filter=blob:none "${URL}" ${1}
