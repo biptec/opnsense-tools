@@ -107,6 +107,10 @@ All final images are stored under:
 
     # make print-IMAGESDIR
 
+Vagrant boxes are stored under:
+
+    # make print-VAGRANTBOXESDIR
+
 Build the userland binaries, bootloader and administrative files:
 
     # make base
@@ -358,6 +362,25 @@ through DHCP and removes the default LAN IPv4 DHCP range:
 
     # make vm-vmdk,20G,1G,biptec
 
+Vagrant VMware boxes
+---------------------
+
+A VMware Desktop Vagrant box can be built as a composite target:
+
+    # make vagrant-vmware[,size[,swap]]
+
+For example, build a 20G box without a swap partition:
+
+    # make vagrant-vmware,20G,never
+
+The target builds a VMDK with the `vagrant` image profile and installs only
+the required `sudo` and `open-vm-tools-nox11` packages.  The profile inherits
+the Biptec VM defaults, creates a key-only `vagrant` user with passwordless
+sudo, and disables packet filtering for initial Vagrant SSH access.
+
+The box uses Vagrant's standard replaceable public key and is intended for
+development and test environments.
+
 Clearing individual build step progress
 ---------------------------------------
 
@@ -386,6 +409,7 @@ Available clean options are:
 * sets:		remove all sets
 * src:		reset kernel/base build directory
 * stage:	reset main staging area
+* vagrantbox:	remove Vagrant boxes
 * vga:		remove vga image
 * vm:		remove vm image
 * xtools:	remove xtools set
