@@ -362,6 +362,18 @@ through DHCP and removes the default LAN IPv4 DHCP range:
 
     # make vm-vmdk,20G,1G,workstation
 
+Proxmox VM images
+------------------
+
+A Proxmox-oriented QCOW2 image can be built with the dedicated image profile:
+
+    # make ADDITIONS="sudo os-qemu-guest-agent" vm-qcow2,20G,never,proxmox
+
+The profile installs `sudo`, enables the OPNsense QEMU Guest Agent plugin and
+leaves user creation to the NoCloud bootstrap.  The bootstrap creates the
+requested key-only automation user and its matching sudo rule on first boot;
+no private key, fixed public key or fixed username is embedded in the image.
+
 Vagrant VMware boxes
 ---------------------
 
