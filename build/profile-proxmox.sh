@@ -22,7 +22,11 @@ if [ ! -x "${ROOTDIR}/usr/local/bin/sudo" ]; then
     exit 1
 fi
 if [ ! -x "${ROOTDIR}/usr/local/bin/qemu-ga" ]; then
-    echo "The os-qemu-guest-agent package is required for the Proxmox profile" >&2
+    echo "The qemu-guest-agent package is required for the Proxmox profile" >&2
+    exit 1
+fi
+if [ ! -f "${ROOTDIR}/usr/local/opnsense/mvc/app/models/OPNsense/QemuGuestAgent/QemuGuestAgent.xml" ]; then
+    echo "The os-qemu-guest-agent plugin is required for the Proxmox profile" >&2
     exit 1
 fi
 
