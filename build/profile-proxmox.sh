@@ -29,6 +29,11 @@ if [ ! -f "${ROOTDIR}/usr/local/opnsense/mvc/app/models/OPNsense/QemuGuestAgent/
     echo "The os-qemu-guest-agent plugin is required for the Proxmox profile" >&2
     exit 1
 fi
+if [ ! -x "${ROOTDIR}/usr/local/opnsense/scripts/boot/nocloud_bootstrap.py" ] || \
+    [ ! -x "${ROOTDIR}/usr/local/etc/rc.syshook.d/early/20-nocloud-bootstrap" ]; then
+    echo "The os-nocloud-bootstrap plugin is required for the Proxmox profile" >&2
+    exit 1
+fi
 
 /usr/local/bin/php "${TOOLSDIR}/build/profile-proxmox.php" \
     "${ROOTDIR}${CONFIG_XML}"

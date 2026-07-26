@@ -367,12 +367,15 @@ Proxmox VM images
 
 A Proxmox-oriented QCOW2 image can be built with the dedicated image profile:
 
-    # make ADDITIONS="sudo os-qemu-guest-agent" vm-qcow2,20G,never,proxmox
+    # make custom-vm,qcow2,20G,never,proxmox \
+        ADDITIONS="os-qemu-guest-agent /path/to/opnsense-proxmox/guest/nocloud-bootstrap"
 
-The profile installs `sudo`, enables the OPNsense QEMU Guest Agent plugin and
-leaves user creation to the NoCloud bootstrap.  The bootstrap creates the
-requested key-only automation user and its matching sudo rule on first boot;
-no private key, fixed public key or fixed username is embedded in the image.
+The profile requires the OPNsense QEMU Guest Agent plugin and the external
+`os-nocloud-bootstrap` plugin. Path-based plugins may be sourced directly from
+another repository and are staged into the package build chroot automatically.
+The bootstrap creates the requested key-only automation user and its matching
+sudo rule on first boot; no private key, fixed public key or fixed username is
+embedded in the image.
 
 Vagrant VMware boxes
 ---------------------

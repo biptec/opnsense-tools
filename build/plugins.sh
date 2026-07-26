@@ -60,6 +60,14 @@ for BRANCH in ${EXTRABRANCH} ${PLUGINSBRANCH}; do
 	setup_copy ${STAGEDIR} ${PLUGINSDIR}
 	git_reset ${STAGEDIR}${PLUGINSDIR} ${BRANCH}
 
+	# A custom image may source one plugin from another repository. Copy it
+	# after git_reset so the untracked external source is not removed.
+	if [ -n "${PLUGINSEXTERNAL_SOURCE}" -a -n "${PLUGINSEXTERNAL_ORIGIN}" ]; then
+		EXTERNAL_DEST=${STAGEDIR}${PLUGINSDIR}/${PLUGINSEXTERNAL_ORIGIN}
+		mkdir -p $(dirname "${EXTERNAL_DEST}")
+		cp -R "${PLUGINSEXTERNAL_SOURCE}" "${EXTERNAL_DEST}"
+	fi
+
 	PREFIX=${PRODUCT_PLUGINS%"*"}
 	PLUGIN_LIST=
 	PLUGIN_DEFER=
