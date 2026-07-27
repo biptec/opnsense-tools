@@ -67,17 +67,30 @@ export EXTRABRANCH=
 make update-plugins
 
 for PLUGIN in ${MISSING}; do
-	if [ ! -d ${PLUGINSDIR}/${PLUGIN} ]; then
+	SOURCE=${PLUGIN}
+	if [ ! -d "${SOURCE}" ]; then
+		SOURCE=${PLUGINSDIR}/${PLUGIN}
+	fi
+	if [ ! -d "${SOURCE}" ]; then
 		echo ">>> Cannot continue without missing plugin ${PLUGIN}"
 		exit 1
 	fi
 
-	# remove previous iterations of the same plugin to be fail-safe
-	NAME=$(make -C ${PLUGINSDIR}/${PLUGIN} PLUGIN_DEVEL= -v PLUGIN_PKGNAME)
-	make plugins-${NAME} PLUGINSLIST="${PLUGIN}" PLUGINSENV="${PLUGINSENV} PLUGIN_DEVEL="
+	SOURCE=$(realpath "${SOURCE}")
+	ORIGIN=external/$(basename "${SOURCE}")
+	HASH=$(git -C "${SOURCE}" rev-parse --short=10 HEAD 2> /dev/null || echo external)
+
+	# Build path-based plugins from their canonical external repository while
+	# staging them under the normal plugin tree inside the build chroot.
+	NAME=$(make -C "${SOURCE}" PLUGINSDIR="${PLUGINSDIR}" \
+	    PLUGIN_DEVEL= -v PLUGIN_PKGNAME)
+	make plugins-${NAME} PLUGINSLIST="${ORIGIN}" \
+	    PLUGINSEXTERNAL_SOURCE="${SOURCE}" \
+	    PLUGINSEXTERNAL_ORIGIN="${ORIGIN}" \
+	    PLUGINSENV="${PLUGINSENV} PLUGIN_DEVEL= PLUGIN_HASH=${HASH}"
 
 	ADDITIONS="${ADDITIONS} ${NAME}"
-	PLUGINS="${PLUGINS} ${PLUGIN}"
+	PLUGINS="${PLUGINS} ${ORIGIN}"
 done
 
 CORE_VERSION=$(load_core_version ${SETSDIR} ${PRODUCT_ARCH} ${PRODUCT_CORE})
