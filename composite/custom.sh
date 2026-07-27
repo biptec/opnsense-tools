@@ -82,14 +82,14 @@ for PLUGIN in ${MISSING}; do
 
 	# Build path-based plugins from their canonical external repository while
 	# staging them under the normal plugin tree inside the build chroot.
-	NAME=$(make -C "${SOURCE}" PLUGINSDIR="${PLUGINSDIR}" \
+	PLUGIN_NAME=$(make -C "${SOURCE}" PLUGINSDIR="${PLUGINSDIR}" \
 	    PLUGIN_DEVEL= -v PLUGIN_PKGNAME)
-	make plugins-${NAME} PLUGINSLIST="${ORIGIN}" \
+	make plugins-${PLUGIN_NAME} PLUGINSLIST="${ORIGIN}" \
 	    PLUGINSEXTERNAL_SOURCE="${SOURCE}" \
 	    PLUGINSEXTERNAL_ORIGIN="${ORIGIN}" \
 	    PLUGINSENV="${PLUGINSENV} PLUGIN_DEVEL= PLUGIN_HASH=${HASH}"
 
-	ADDITIONS="${ADDITIONS} ${NAME}"
+	ADDITIONS="${ADDITIONS} ${PLUGIN_NAME}"
 	PLUGINS="${PLUGINS} ${ORIGIN}"
 done
 
