@@ -61,10 +61,14 @@ fi
 
 ADDITIONS=${PRESENT}
 
-# assume master branch use but provide stable package (PLUGIN_DEVEL empty)
-export PLUGINSBRANCH=master
-export EXTRABRANCH=
-make update-plugins
+# Preserve the upstream behavior unless the caller has already provided an
+# exact, verified plugin checkout.  Re-pulling master would otherwise defeat
+# reproducible source pins used by external image builders.
+if [ "${PINNED_PLUGIN_CHECKOUT:-}" != "1" ]; then
+	export PLUGINSBRANCH=master
+	export EXTRABRANCH=
+	make update-plugins
+fi
 
 for PLUGIN in ${MISSING}; do
 	SOURCE=${PLUGIN}
