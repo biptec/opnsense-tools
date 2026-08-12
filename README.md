@@ -377,6 +377,27 @@ The bootstrap creates the requested key-only automation user and its matching
 sudo rule on first boot; no private key, fixed public key or fixed username is
 embedded in the image.
 
+Reproducible custom image package builds
+----------------------------------------
+
+External image builders may pin the plugins repository to an exact verified
+checkout before invoking a custom image build. Set `PINNED_PLUGIN_CHECKOUT=1`
+to preserve that checkout; the custom composite will not replace it with the
+current `master` branch. Without this variable, the traditional upstream
+behavior is unchanged and `make update-plugins` is run automatically.
+
+The 26.7 ports configuration also contains the package and option contract used
+by infrastructure-oriented custom images. It includes Salt, FreeIPA/SSSD,
+QEMU/automation support, administration shells, and network/debug utilities.
+Identity-related packages are built consistently with MIT Kerberos: Samba,
+Wireshark and Python GSSAPI explicitly select the MIT GSSAPI backend. The
+FreeIPA client footprint keeps QR support suitable for terminal use while
+leaving the optional PIL/PNG renderers disabled.
+
+These settings make the package set reproducible, but do not add host identity,
+realm enrollment, Salt minion identity, addresses, credentials, or other
+machine-specific configuration to an image. Those remain deployment-time data.
+
 Vagrant VMware boxes
 ---------------------
 
